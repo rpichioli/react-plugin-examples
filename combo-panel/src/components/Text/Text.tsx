@@ -2,12 +2,15 @@ import React, { PureComponent } from 'react';
 import {
   BasicGaugeColor,
   getColorFromHexRgbOrName,
+  GrafanaTheme
+} from '@grafana/ui';
+
+import {
   getMappedValue,
-  GrafanaTheme,
   Threshold,
   TimeSeriesValue,
   ValueMapping,
-} from '@grafana/ui';
+} from '@grafana/data';
 
 interface Props {
   style: React.CSSProperties;

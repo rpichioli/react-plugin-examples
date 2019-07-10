@@ -1,10 +1,13 @@
 import React, { PureComponent } from 'react';
 import {
-  NullValueMode,
   PanelProps,
-  processTimeSeries,
   ThemeContext,
 } from '@grafana/ui';
+
+import {
+  NullValueMode,
+  processTimeSeries
+} from '@grafana/data';
 
 import { ComboOptions } from '../types';
 import { BigTextLayout } from './Text/BigTextLayout';

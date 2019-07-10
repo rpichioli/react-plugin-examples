@@ -1,0 +1,40 @@
+version: 2.1
+description: # Reusable Plugin Pipeline
+
+jobs:
+  build_workshop:
+    docker:
+      - image: circleci/node:10
+    working_directory: ~/workshop
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - yarn-packages-{{ checksum "yarn.lock" }}
+      - run:
+          name: Build Plugin
+          command: |
+            cd workshop
+            sudo npm install -g yarn --quiet
+            yarn install --pure-lockfile
+            npx grafana-toolkit plugin:ci-build
+      - save_cache:
+          paths:
+            - */node_modules
+          key: yarn-packages-{{ checksum "yarn.lock" }}
+      - persist_to_workspace:
+          root: .
+          paths:
+            - */work
+            - */coverage
+      - store_artifacts:
+          path: */work
+      - store_artifacts:
+          path: */coverage
+
+
+workflows:
+  version: 2
+  build_plugins:
+    jobs:
+      - build_workshop

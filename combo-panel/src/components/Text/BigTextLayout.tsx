@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
-import { Gauge, Graph, ValueMapping } from '@grafana/ui';
+import { Gauge, Graph } from '@grafana/ui';
+import { ValueMapping } from '@grafana/data';
 
 import { Text } from './Text';
 

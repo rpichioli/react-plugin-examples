@@ -3,10 +3,13 @@ import {
   PanelEditorProps,
   PanelOptionsGrid,
   ValueMappingsEditor,
-  Threshold,
   ThresholdsEditor,
-  ValueMapping,
 } from '@grafana/ui';
+
+import {
+  Threshold,
+  ValueMapping,
+} from '@grafana/data';
 
 import { LayoutOptions } from './LayoutOptions';
 import { ValueOptions } from './Gauge/ValueOptions';
