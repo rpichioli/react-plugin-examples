@@ -4,3 +4,5 @@ npm-debug.log
 .vscode
 .idea
 yarn-error.log
+dist/
+coverage/

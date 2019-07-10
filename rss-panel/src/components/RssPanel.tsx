@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
-import Feed from 'rss-to-json';
+import RssParser from 'rss-parser';
+
+import { DataFrame, FieldType } from '@grafana/data';
 import { PanelProps } from '@grafana/ui';
-
 import { RssFeedRow } from './RssFeedRow';
-
 import { RssFeed, RssOptions } from '../types';
 
 interface Props extends PanelProps<RssOptions> {}
@@ -16,7 +16,7 @@ interface State {
 const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
 
 export class RssPanel extends PureComponent<Props, State> {
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
@@ -35,19 +35,20 @@ export class RssPanel extends PureComponent<Props, State> {
     }
   }
 
-  loadFeed(feedUrl: string) {
-    Feed.load(CORS_PROXY + feedUrl, (error, feed) => {
-      if (error) {
-        console.error(error);
-        this.setState({ isError: true });
-        return;
-      }
+  async loadFeed(feedUrl: string) {
+    const parser = new RssParser();
 
+    try {
+      const res = (await parser.parseURL(CORS_PROXY + feedUrl)) as RssFeed;
+      console.log( 'FEED', res );
       this.setState({
-        rssFeed: feed,
+        rssFeed: res,
         isError: false,
       });
-    });
+    } catch (err) {
+      console.error(err);
+      this.setState({ isError: true });
+    }
   }
 
   render() {
@@ -57,9 +58,8 @@ export class RssPanel extends PureComponent<Props, State> {
       return (
         <div
           style={{
-            padding: '24px 0',
             maxHeight: '100%',
-            overflow: 'scroll',
+            overflow: 'auto',
           }}
         >
           {rssFeed.items.map((item, index) => {
@@ -76,3 +76,38 @@ export class RssPanel extends PureComponent<Props, State> {
     return <div>Loading...</div>;
   }
 }
+
+export function feedToDataFrame(feed: RssFeed) {
+  const data: DataFrame = {
+    fields: [
+      {name: 'title', type: FieldType.string},
+      // {name: 'content', type: 'string'},
+      // {name: 'snippet', type: 'string'},
+      // {name: 'creator', type: 'string'},
+      {name: 'link', type: FieldType.string},
+      // {name: 'guid', type: 'string'},
+      // {name: 'isoDate', type: 'time'},
+      // {name: 'pubDate', type: 'time'},
+    ],
+    rows: [],
+    meta: {
+
+    }
+  };
+
+  for (const item of feed.items) {
+    data.rows.push([
+      item.title,
+      // item.content,
+      // item.contentSnippet,
+      // item.creator,
+      item.link,
+      // item.guid,
+      // item.isoDate,
+      // item.pubDate,
+    ]);
+  }
+
+  return data;
+}
+

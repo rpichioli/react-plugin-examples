@@ -12,10 +12,15 @@
   "license": "Apache-2.0",
   "dependencies": {
     "moment": "^2.24.0",
-    "rss-to-json": "1.0.4"
+    "rss-parser": "^3.7.1"
   },
   "devDependencies": {
+    "@grafana/toolkit": "latest",
     "@grafana/ui": "latest",
-    "@grafana/toolkit": "latest"
+    "@grafana/data": "latest",
+    "@types/enzyme": "^3.10.2",
+    "@types/enzyme-adapter-react-16": "^1.0.5",
+    "enzyme": "^3.10.0",
+    "enzyme-adapter-react-16": "^1.14.0"
   }
 }
